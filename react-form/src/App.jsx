@@ -10,7 +10,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Box from '@mui/material/Box';
 import {defaultRequest} from './functions/data';
-
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const darkTheme = createTheme({
   palette: {
@@ -22,13 +22,13 @@ function App() {
   const [formElements, setFormElements] = useState([]);
   const [formContent, setFormContent] = useState([]);
   const [submited, setSubmited] = useState(false);
-  const [data, setData] = useState(defaultRequest);
+  const [request, setRequest] = useState(defaultRequest);
   const [jsonText, setJsonText] = useState('');
   const [jsonError, setJsonError] = useState(false);
 
   useEffect(() => {
-    setFormElements(formList(data));
-  }, [data,])
+    setFormElements(formList(request.data));
+  }, [request,])
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -58,7 +58,7 @@ function App() {
     const formData = new FormData(event.currentTarget);
     try {
       const jsonData = JSON.parse(formData.get('json'));
-      setData(jsonData)
+      setRequest(jsonData)
       setJsonError(false);
       setJsonText('');
     } catch (error) {
@@ -76,6 +76,7 @@ function App() {
       >
       <Accordion >
         <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1-content"
           id="panel1-header"
         >
@@ -92,7 +93,7 @@ function App() {
                       margin='normal'
                       multiline
                       maxRows={20}
-                      defaultValue={JSON.stringify(data, null, 2)}
+                      defaultValue={JSON.stringify(request, null, 2)}
                       error={jsonError}
                       helperText={jsonText}
                   />
