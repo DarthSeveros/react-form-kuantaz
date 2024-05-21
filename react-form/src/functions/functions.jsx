@@ -2,10 +2,7 @@ import TextField from '@mui/material/TextField';
 import { defaultRequest } from './data';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
-import FormGroup from '@mui/material/FormGroup';
-import { Checkbox } from '@mui/material';
+import { Checkbox, Typography , Button, FormGroup, FormLabel, FormControlLabel, Box} from '@mui/material';
 
 /**
  * Generates a list of inputs from a json
@@ -128,4 +125,35 @@ function radioArray(options) {
         )
     }
     return optionsArray;
+}
+
+export function answersForm(data, handleClick) {
+    const array = [];
+      for (const pair of data.entries()) {
+        array.push(
+          <Box
+            sx={{
+                border: 0,
+                borderColor: "",
+                borderRadius: 1,
+                marginY: 2,
+                backgroundColor: '#202020'
+            }}
+          >
+            <div>
+                <Typography variant="h5" gutterBottom>
+                {pair[0]}
+                </Typography>
+            </div>
+            <div>
+                <Typography variant="subtitle1" gutterBottom>
+                {pair[1]}
+                </Typography>
+            </div>
+            
+          </Box>
+        )
+      }
+      array.push(<Button variant="contained" type='button' onClick={handleClick}>Aceptar</Button>);
+      return array;
 }

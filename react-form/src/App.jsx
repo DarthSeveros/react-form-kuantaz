@@ -3,8 +3,7 @@ import './App.css'
 import Button from '@mui/material/Button';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { FormControl, TextField } from '@mui/material';
-import Typography from '@mui/material/Typography';
-import formList from './functions/functions'
+import formList, { answersForm } from './functions/functions'
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -34,23 +33,7 @@ function App() {
     event.preventDefault();
     setSubmited(true);
     const data = new FormData(event.currentTarget);
-    setFormContent(() => {
-      const array = [];
-      for (const pair of data.entries()) {
-        array.push(
-          <>
-            <Typography variant="h5" gutterBottom>
-              {pair[0]}
-            </Typography>
-            <Typography variant="subtitle1" gutterBottom>
-              {pair[1]}
-            </Typography>
-          </>
-        )
-      }
-      array.push(<Button variant="contained" type='button' onClick={() => setSubmited(false)}>Aceptar</Button>);
-      return array;
-    });
+    setFormContent(answersForm(data, () => setSubmited(false)));
   }
 
   function handleJsonSubmit(event) {
