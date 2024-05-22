@@ -1,3 +1,4 @@
+
 export const defaultRequest = {
     "data": [
       {
@@ -35,5 +36,32 @@ export const defaultRequest = {
         type: 'Textarea',
         value: null,
       },
+      {
+        label: "Fecha de nacimiento",
+        name: 'birthdate',
+        disabled: false,
+        isRequired: true,
+        type: 'Date',
+      },
+      {
+        label: "Genero",
+        name: 'genero',
+        disabled: true,
+        isRequired: true,
+        type: 'Radio',
+        options: [
+            "Maculino",
+            "Femenino",
+            "Otro"
+        ]
+    },
+      {
+        label: "Acepto términos y condiciones",
+        name: 'terminos',
+        disabled: false,
+        isRequired: true,
+        type: 'Checkbox',
+        checked: true,
+    }
     ]
   }

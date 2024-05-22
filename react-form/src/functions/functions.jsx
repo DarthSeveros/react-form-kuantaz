@@ -2,7 +2,8 @@ import TextField from '@mui/material/TextField';
 import { defaultRequest } from './data';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import { Checkbox, Typography , Button, FormGroup, FormLabel, FormControlLabel, Box} from '@mui/material';
+import { Checkbox, FormGroup, FormLabel, FormControlLabel, Box } from '@mui/material';
+import TextLabel from '../components/TextLabel';
 
 /**
  * Generates a list of inputs from a json
@@ -32,11 +33,11 @@ export default function formList(data = defaultRequest.data) {
 export function generateJSXElement(key, data) {
     switch (data.type) {
         case 'TextInput':
-            return <div key={key}>
+            return <Box key={key} sx={{display: 'flex', flexDirection: 'column'}}>
+                <TextLabel isRequired={data.isRequired} disabled={data.disabled}>{data.label}</TextLabel>
                 <TextField
-                    id="outlined-basic"
+                    id={`inputtext${key}`}
                     name={data.name}
-                    label={data.label}
                     variant="outlined"
                     type='text'
                     margin='normal'
@@ -44,14 +45,15 @@ export function generateJSXElement(key, data) {
                     {...data.value === null ? { defaultValue: '' } : { defaultValue: data.value }}
                     {...data.isRequired && { required: true }}
                 />
-            </div>
+            </Box>
 
         case 'Textarea':
-            return <div key={key}>
+            return <Box key={key} sx={{display: 'flex', flexDirection: 'column'}}>
+                <TextLabel isRequired={data.isRequired} disabled={data.disabled}>{data.label}</TextLabel>
                 <TextField
-                    id="outlined-basic"
+                    sx={{width: '100%'}}
+                    id={`inputtextarea${key}`}
                     name={data.name}
-                    label={data.label}
                     variant="outlined"
                     type='text'
                     margin='normal'
@@ -60,14 +62,14 @@ export function generateJSXElement(key, data) {
                     {...data.value === null ? { defaultValue: '' } : { defaultValue: data.value }}
                     {...data.isRequired && { required: true }}
                 />
-            </div>
+            </Box>
 
         case 'TextEmail':
-            return <div key={key}>
+            return <Box key={key} sx={{display: 'flex', flexDirection: 'column'}}>
+                <TextLabel isRequired={data.isRequired} disabled={data.disabled}>{data.label}</TextLabel>
                 <TextField
-                    id="outlined-basic"
+                    id={`inputemail${key}`}
                     name={data.name}
-                    label={data.label}
                     variant="outlined"
                     type='email'
                     margin='normal'
@@ -75,11 +77,25 @@ export function generateJSXElement(key, data) {
                     {...data.value === null ? { defaultValue: '' } : { defaultValue: data.value }}
                     {...data.isRequired && { required: true }}
                 />
-            </div>
+            </Box>
+
+        case 'Date':
+            return <Box key={key} sx={{display: 'flex', flexDirection: 'column'}}>
+                <TextLabel isRequired={data.isRequired} disabled={data.disabled}>{data.label}</TextLabel>
+                <TextField
+                    id={`inputdate${key}`}
+                    name={data.name}
+                    type='date'
+                    variant='outlined'
+                    {...data.isRequired && { required: true }}
+                    disabled={data.disabled}
+                    margin='normal'
+                />
+            </Box>
 
         case 'Radio':
             {
-                const optionsArray = radioArray(data.options)
+                const optionsArray = radioArray(data.options, data.isRequired)
                 return <div key={key}>
                     <FormLabel id={`radio${key}`}>{data.label}</FormLabel>
                     <RadioGroup
@@ -95,16 +111,19 @@ export function generateJSXElement(key, data) {
         case 'Checkbox':
             return <div key={key}>
                 <FormGroup>
-                    <FormControlLabel 
-                    control={<Checkbox
-                        name={data.name}
-                        disabled={data.disabled}
-                        {...data.isRequired && { required: true }}
-                        {...data.checked && {defaultChecked: true}} 
-                        />} 
-                    label={data.label} />
+                    <FormControlLabel
+                        control={<Checkbox
+                            name={data.name}
+                            disabled={data.disabled}
+                            {...data.isRequired && { required: true }}
+                            {...data.checked && { defaultChecked: true }}
+                        />}
+                        label={data.label} />
                 </FormGroup>
             </div>
+
+
+
 
         default:
             break;
@@ -113,47 +132,18 @@ export function generateJSXElement(key, data) {
 
 
 /**
- * Generates a list of FormControlLabel of Radio
- * @param {string[]} options - List of radio values 
+ * Generates an array of FormControlLabel of Radio
+ * @param {string[]} options - List of radio values
+ * @param {boolean} isRequired - radio required or not
  * @returns {JSXElement[]} Returns an FormControlLabel array
  */
-function radioArray(options) {
+function radioArray(options, isRequired) {
     const optionsArray = [];
     for (let option of options) {
         optionsArray.push(
-            <FormControlLabel value={option} control={<Radio />} label={option} />
+            <FormControlLabel value={option} control={<Radio required={isRequired}/>} label={option} />
         )
     }
     return optionsArray;
 }
 
-export function answersForm(data, handleClick) {
-    const array = [];
-      for (const pair of data.entries()) {
-        array.push(
-          <Box
-            sx={{
-                border: 0,
-                borderColor: "",
-                borderRadius: 1,
-                marginY: 2,
-                backgroundColor: '#202020'
-            }}
-          >
-            <div>
-                <Typography variant="h5" gutterBottom>
-                {pair[0]}
-                </Typography>
-            </div>
-            <div>
-                <Typography variant="subtitle1" gutterBottom>
-                {pair[1]}
-                </Typography>
-            </div>
-            
-          </Box>
-        )
-      }
-      array.push(<Button variant="contained" type='button' onClick={handleClick}>Aceptar</Button>);
-      return array;
-}
